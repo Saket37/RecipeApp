@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">RecipeApp</string>
+    <string name="label_search">Perform search</string>
+    <string name="search_recipe">Search Recipe</string>
+    <string name="label_back">Back</string>
+    <string name="search_no_matches">No matches for “%1s”</string>
+    <string name="search_no_matches_retry">Try broadening your search</string>
+</resources>
