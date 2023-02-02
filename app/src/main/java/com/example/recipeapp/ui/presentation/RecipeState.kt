@@ -9,4 +9,6 @@ data class RecipeState(
     val isLoading: Boolean = false,
     val error: String? = null,
     var page: Int = 0,
+    val onObserveClicked: Boolean = false,
+    val noResultFound: Boolean = false
 )
