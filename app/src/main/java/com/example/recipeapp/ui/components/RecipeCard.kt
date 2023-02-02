@@ -19,8 +19,6 @@ import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
-import com.bumptech.glide.integration.compose.GlideImage
-import com.bumptech.glide.request.RequestListener
 import com.example.recipeapp.data.remote.entity.RecipeResult
 import com.example.recipeapp.ui.theme.Ocean7
 import com.example.recipeapp.ui.theme.Shadow5
@@ -92,7 +90,7 @@ fun RecipeItem(
             Text(
                 text = recipe.created_at.unixSecondsToText("dd-mm-yyyy"),
                 style = MaterialTheme.typography.bodySmall,
-                modifier = Modifier.padding(horizontal = 16.dp)
+                modifier = Modifier.padding(horizontal = 16.dp),
             )
         }
     }

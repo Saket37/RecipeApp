@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -20,6 +19,7 @@ import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.recipeapp.ui.components.RecipeItem
 import com.example.recipeapp.ui.components.SearchBar
+import com.example.recipeapp.ui.components.ShimmerRecipeItem
 import com.example.recipeapp.ui.presentation.RecipeState
 import com.example.recipeapp.ui.presentation.RecipeViewModel
 import com.example.recipeapp.utils.SearchEvent
@@ -55,32 +55,33 @@ fun HomeContent(
             query = uiState.query,
             onQueryChange = { handleEvent(SearchEvent.QueryChanged(it)) },
             onSearchClick = {
-
                 handleEvent(SearchEvent.Observe)
             },
             keyboardController = keyboardController
         )
         Spacer(modifier = Modifier.height(12.dp))
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            if (uiState.isLoading) {
-                CircularProgressIndicator()
-            } else {
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(2),
-                    modifier = Modifier
-                        .wrapContentSize()
-                        .fillMaxWidth()
-                        .padding(end = 16.dp),
-                ) {
-                    items(uiState.recipes) {
+            // TODO if query is empty and pressed search, show query empty
+            // TODO if no result found
+            // TODO if any error occurred
 
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2),
+                modifier = Modifier
+                    .wrapContentSize()
+                    .fillMaxWidth()
+                    .padding(end = 16.dp),
+            ) {
+                if (uiState.isLoading) {
+                    items(8) {
+                        ShimmerRecipeItem()
+                    }
+                } else {
+                    items(uiState.recipes) {
                         RecipeItem(recipe = it)
                     }
-
                 }
-
             }
         }
-
     }
 }
