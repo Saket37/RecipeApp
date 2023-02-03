@@ -37,7 +37,6 @@ private val gradientWidth
         (2 * (HighlightCardWidth + HighlightCardPadding).toPx())
     }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun RecipeItem(
     modifier: Modifier = Modifier,
@@ -88,7 +87,7 @@ fun RecipeItem(
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = recipe.created_at.unixSecondsToText("dd-mm-yyyy"),
+                text = recipe.created_at.unixSecondsToText("dd-MM-yyyy"),
                 style = MaterialTheme.typography.bodySmall,
                 modifier = Modifier.padding(horizontal = 16.dp),
             )
@@ -105,6 +104,7 @@ fun RecipeImage(
     modifier: Modifier = Modifier,
 ) {
     Surface(color = Color.LightGray, shape = CircleShape, modifier = modifier) {
+        //TODO Add a placeholder for image
         /*GlideImage(
             model = imageUrl,
             contentDescription = contentDescription,
@@ -122,7 +122,6 @@ fun RecipeImage(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Preview
 @Composable
 fun RecipeCardPreview() {

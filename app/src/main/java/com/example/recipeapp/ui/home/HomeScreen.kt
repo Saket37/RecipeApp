@@ -3,9 +3,6 @@ package com.example.recipeapp.ui.home
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -21,7 +18,6 @@ import com.example.recipeapp.ui.presentation.RecipeState
 import com.example.recipeapp.ui.presentation.RecipeViewModel
 import com.example.recipeapp.utils.SearchEvent
 
-@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun HomeScreen() {
@@ -33,7 +29,6 @@ fun HomeScreen() {
 }
 
 @OptIn(ExperimentalComposeUiApi::class)
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeContent(
     modifier: Modifier = Modifier,
@@ -63,23 +58,7 @@ fun HomeContent(
             when (uiState.searchDisplay) {
                 SearchDisplay.NoResults -> NoResults(query = uiState.query)
                 SearchDisplay.Results -> {
-                    LazyVerticalGrid(
-                        columns = GridCells.Fixed(2),
-                        modifier = Modifier
-                            .wrapContentSize()
-                            .fillMaxWidth()
-                            .padding(end = 16.dp),
-                    ) {
-                        if (uiState.isLoading) {
-                            items(8) {
-                                ShimmerRecipeItem()
-                            }
-                        } else {
-                            items(uiState.recipes) {
-                                RecipeItem(recipe = it)
-                            }
-                        }
-                    }
+                    SearchResult(isLoading = uiState.isLoading, recipes = uiState.recipes)
                 }
                 SearchDisplay.Error -> {
 
