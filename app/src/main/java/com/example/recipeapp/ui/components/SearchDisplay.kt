@@ -13,6 +13,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.recipeapp.R
 
+enum class SearchDisplay {
+     Results, NoResults, Error
+}
+
 @Composable
 fun NoResults(
     query: String, modifier: Modifier = Modifier

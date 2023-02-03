@@ -20,19 +20,23 @@ class RecipeViewModel @Inject constructor(private val recipeRepository: RecipeRe
 
     //private val page = MutableStateFlow(0)
     private var recipeListScrollPosition = 0
+
+    init {
+        observe()
+    }
+
     private fun observe() {
         viewModelScope.launch(Dispatchers.IO) {
             _uiState.value = _uiState.value.copy(isLoading = true)
             withContext(Dispatchers.Main) {
-
-                _uiState.value.query?.let { query ->
+                _uiState.value.query.let { query ->
                     recipeRepository.getRecipeList(
                         _uiState.value.page,
                         20,
                         query
                     )
                 }
-                    ?.collect { resource ->
+                    .collect { resource ->
                         when (resource) {
                             is Resource.Success -> {
                                 val recipes = resource.data?.results
@@ -43,14 +47,18 @@ class RecipeViewModel @Inject constructor(private val recipeRepository: RecipeRe
                                         if (recipeResults.isEmpty() && count == 0) {
                                             _uiState.value = _uiState.value.copy(
                                                 isLoading = false,
-                                                noResultFound = true
+                                                noResultFound = true,
+                                                onObserveClicked = true,
+                                                recipes = recipeResults.toMutableList(),
+                                                count = count
                                             )
                                         } else {
                                             _uiState.value = _uiState.value.copy(
                                                 isLoading = false,
                                                 recipes = recipeResults.toMutableList(),
                                                 count = count,
-                                                onObserveClicked = true
+                                                onObserveClicked = true,
+                                                noResultFound = false
                                             )
                                         }
                                     }
@@ -106,7 +114,7 @@ class RecipeViewModel @Inject constructor(private val recipeRepository: RecipeRe
      }*/
 
     private fun updateQuery(query: String) {
-        _uiState.value = _uiState.value.copy(query = query, onObserveClicked = false)
+        _uiState.value = _uiState.value.copy(query = query)
     }
 
     /* private fun appendRecipes(recipe: List<RecipeResult>) {

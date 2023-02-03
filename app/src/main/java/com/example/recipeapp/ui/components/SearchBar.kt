@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
@@ -24,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.recipeapp.R
 import com.example.recipeapp.ui.theme.FunctionalDarkGrey
+
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -58,7 +60,8 @@ fun SearchBar(
                     onValueChange = { onQueryChange(it) },
                     modifier = Modifier
                         .weight(1f)
-                        .padding(start = 6.dp),
+                        .padding(start = 6.dp)
+                        ,
                     singleLine = true,
                     keyboardOptions = KeyboardOptions(
                         capitalization = KeyboardCapitalization.Words,
@@ -67,17 +70,19 @@ fun SearchBar(
                         imeAction = ImeAction.Search
                     ),
                     keyboardActions = KeyboardActions(onSearch = {
-                        if (query != null) {
-                            keyboardController?.hide()
+
                             onSearchClick()
-                        }
+                            keyboardController?.hide()
+
                     }),
                     textStyle = TextStyle(color = Color.White, fontSize = 18.sp)
                 )
                 Spacer(modifier = Modifier.width(12.dp))
                 Button(onClick = {
-                    keyboardController?.hide()
-                    onSearchClick()
+
+                        onSearchClick()
+                        keyboardController?.hide()
+
                 }) {
                     Icon(
                         imageVector = Icons.Outlined.Search,

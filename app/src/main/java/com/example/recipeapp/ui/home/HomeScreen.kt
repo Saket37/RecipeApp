@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -17,10 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.recipeapp.ui.components.NoResults
-import com.example.recipeapp.ui.components.RecipeItem
-import com.example.recipeapp.ui.components.SearchBar
-import com.example.recipeapp.ui.components.ShimmerRecipeItem
+import com.example.recipeapp.ui.components.*
 import com.example.recipeapp.ui.presentation.RecipeState
 import com.example.recipeapp.ui.presentation.RecipeViewModel
 import com.example.recipeapp.utils.SearchEvent
@@ -63,35 +59,33 @@ fun HomeContent(
         )
         Spacer(modifier = Modifier.height(12.dp))
         Box(modifier = Modifier.fillMaxSize()) {
-            // TODO if query is empty and pressed search, show a snackbar saying query empty
-            // TODO if no result found
             // TODO if any error occurred
-            // TODO when observe is called but query is erased
-            if (!uiState.isLoading && uiState.recipes.isEmpty()  && !uiState.onObserveClicked) {
-                Text(text = "Please, Search any recipe")
-            } else if (!uiState.isLoading && uiState.recipes.isEmpty() && !uiState.query.isNullOrBlank() && uiState.onObserveClicked) {
-                // TODO should occur after observe
-                NoResults(query = uiState.query)
-            } else {
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(2),
-                    modifier = Modifier
-                        .wrapContentSize()
-                        .fillMaxWidth()
-                        .padding(end = 16.dp),
-                ) {
-                    if (uiState.isLoading) {
-                        items(8) {
-                            ShimmerRecipeItem()
-                        }
-                    } else {
-                        items(uiState.recipes) {
-                            RecipeItem(recipe = it)
+            when (uiState.searchDisplay) {
+                SearchDisplay.NoResults -> NoResults(query = uiState.query)
+                SearchDisplay.Results -> {
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(2),
+                        modifier = Modifier
+                            .wrapContentSize()
+                            .fillMaxWidth()
+                            .padding(end = 16.dp),
+                    ) {
+                        if (uiState.isLoading) {
+                            items(8) {
+                                ShimmerRecipeItem()
+                            }
+                        } else {
+                            items(uiState.recipes) {
+                                RecipeItem(recipe = it)
+                            }
                         }
                     }
                 }
+                SearchDisplay.Error -> {
 
+                }
             }
         }
     }
+
 }
