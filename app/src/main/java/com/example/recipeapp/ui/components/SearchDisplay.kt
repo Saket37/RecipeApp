@@ -1,12 +1,10 @@
 package com.example.recipeapp.ui.components
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,13 +16,23 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.recipeapp.R
 import com.example.recipeapp.data.remote.entity.RecipeResult
+import com.example.recipeapp.utils.Constants.PAGE_SIZE
 
 enum class SearchDisplay {
     Results, NoResults, Error
 }
 
 @Composable
-fun SearchResult(modifier: Modifier = Modifier, isLoading: Boolean, recipes: List<RecipeResult>) {
+fun SearchResult(
+    modifier: Modifier = Modifier,
+    isLoading: Boolean,
+    recipes: List<RecipeResult>,
+    onChangeRecipeScrollPosition: (position: Int) -> Unit,
+    page: Int,
+    loadNextPage: () -> Unit,
+    count: Int
+) {
+
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         modifier = Modifier
@@ -32,17 +40,28 @@ fun SearchResult(modifier: Modifier = Modifier, isLoading: Boolean, recipes: Lis
             .fillMaxWidth()
             .padding(end = 16.dp),
     ) {
-        if (isLoading) {
+        if (isLoading && recipes.isEmpty()) {
             items(8) {
                 ShimmerRecipeItem()
             }
         } else {
-            items(recipes) {
-                RecipeItem(recipe = it)
+            itemsIndexed(items = recipes) { index, recipe ->
+                onChangeRecipeScrollPosition(index)
+                if ((index + 1) >= ((page + 1) * PAGE_SIZE) && !isLoading) {
+                    loadNextPage()
+                }
+                RecipeItem(recipe = recipe)
             }
         }
     }
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.Bottom
+    ) {
+        ProgressBar(isLoading = isLoading, recipes = recipes, modifier = Modifier)
+    }
 }
+
 
 @Composable
 fun NoResults(

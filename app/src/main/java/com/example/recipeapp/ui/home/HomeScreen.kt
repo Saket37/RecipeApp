@@ -1,9 +1,8 @@
 package com.example.recipeapp.ui.home
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -34,8 +33,7 @@ fun HomeContent(
     modifier: Modifier = Modifier,
     uiState: RecipeState,
     handleEvent: (event: SearchEvent) -> Unit,
-
-    ) {
+) {
     Column {
         Spacer(modifier = Modifier.statusBarsPadding())
         val searchFocusRequester = FocusRequester()
@@ -53,12 +51,22 @@ fun HomeContent(
             keyboardController = keyboardController
         )
         Spacer(modifier = Modifier.height(12.dp))
-        Box(modifier = Modifier.fillMaxSize()) {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
             // TODO if any error occurred
             when (uiState.searchDisplay) {
                 SearchDisplay.NoResults -> NoResults(query = uiState.query)
                 SearchDisplay.Results -> {
-                    SearchResult(isLoading = uiState.isLoading, recipes = uiState.recipes)
+                    SearchResult(
+                        isLoading = uiState.isLoading,
+                        recipes = uiState.recipes,
+                        onChangeRecipeScrollPosition = {
+                            handleEvent(
+                                SearchEvent.ChangeScrollPosition(it)
+                            )
+                        }, page = uiState.page,
+                        loadNextPage = { handleEvent(SearchEvent.LoadNextPage) },
+                        count = uiState.count
+                    )
                 }
                 SearchDisplay.Error -> {
 
